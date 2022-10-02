@@ -18,31 +18,28 @@ class twitterScraper:
 		    print('Failed authentication')
 		    return -1
 
-	def extract_base_traits(self, user, api):
+	def extract_public_traits(self, user):
 		name = user.name
 		screen_name = user.screen_name
 		followers_count = user.followers_count
-		return name, screen_name, followers_count
+		return name, f'@{screen_name}', followers_count
+
+
+	def extract_private_traits(self, user, api):
+		followers = api.get_followers()
+		followers_list = []
+
+		for follower in followers:
+			followers_list.append(list(self.extract_public_traits(follower)))
+
+		return followers_list
+
+
 
 
 scraper = twitterScraper()
 
 api, user = scraper.load_resources(api_key, api_secrets, access_token, access_secret)
-name, screen_name, followers_count = scraper.extract_base_traits(user, api)
- 
+name, screen_name, followers_count = scraper.extract_public_traits(user)
 
-
-# class personaTwitter:
-# 	def __init__(self, name, screen_name, followers_count):
-# 		self.name = name
-# 		self.screen_name = screen_name
-# 		self.followers_count = followers_count
-
-
-
-
-# me = personaTwitter(name, screen_name, followers_count)
-# print(f'{me.name} | @{me.screen_name}: {me.followers_count} followers')
-
-
-
+followers = scraper.extract_private_traits(user, api)
