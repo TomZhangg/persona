@@ -10,10 +10,10 @@ def authenticate(api_key, api_secrets, access_token, access_secret):
 	api = tweepy.API(auth)
 	try:
 	    api.verify_credentials()
-	    print('Successful Authentication')
+	    print('Twitter: Successful Authentication')
 	    return api
 	except:
-	    print('Failed authentication')
+	    print('Twitter: Failed authentication')
 	    return -1
 
 class twitterScraper:
